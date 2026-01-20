@@ -8,8 +8,8 @@ export class LoginController {
   constructor(private readonly loginService: LoginService) { }
 
   @Post('login')
-  login(@Body() data: LoginDto, @Res({ passthrough: true }) response: Response) {
-    const token = this.loginService.login(data);
+  async login(@Body() data: LoginDto, @Res({ passthrough: true }) response: Response) {
+    const token = await this.loginService.login(data);
     response.cookie('jwt', token);
     return 'logged in successfully';
   }
