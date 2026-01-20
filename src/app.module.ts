@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './common/entities/user.entity';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -15,6 +16,11 @@ import { AuthModule } from './modules/auth/auth.module';
       entities: [User],
       synchronize: true,
     }),
+    JwtModule.register({
+            global: true,
+            secret: 'shaktiman',
+            signOptions: { expiresIn: '1hr' },
+          }),
     UserModule , 
     AuthModule
   ],
