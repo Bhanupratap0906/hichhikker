@@ -1,12 +1,18 @@
-import { Controller, Get, Req } from '@nestjs/common';
+import { Controller, Get, NotFoundException, Req, Request, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
-import { Cookies } from 'src/common/decorators/cookies';
+import { AuthGuard } from 'src/common/decorators/authguard';
+import { CurrentUser } from 'src/common/decorators/cookies';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
   @Get('profile')
-  getProfile(@Cookies('jwt') token: string) {
-    return this.userService.getProfile(token);
+  @UseGuards(AuthGuard)
+  getProfile(@CurrentUser() userId: string) {
+    if (!userId) {
+      throw new NotFoundException('Need to be logged in');
+    }
+    return this.userService.getProfile(userId);
   }
+
 }
