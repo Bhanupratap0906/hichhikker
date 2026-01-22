@@ -4,7 +4,8 @@ import { User } from './common/entities/user.entity';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import type { JwtModuleOptions } from '@nestjs/jwt';
 
 @Module({
   imports: [ConfigModule.forRoot(),
@@ -18,10 +19,13 @@ import { ConfigModule } from '@nestjs/config';
     entities: [User],
     synchronize: true,
   }),
-  JwtModule.register({
+  JwtModule.registerAsync({
     global: true,
-    secret: 'shaktiman',
-    signOptions: { expiresIn: '1hr' },
+    inject: [ConfigService],
+    useFactory: (configService: ConfigService): JwtModuleOptions => ({
+      secret: configService.get<string>('JWT_SECRET'),
+      signOptions: { expiresIn: parseInt(configService.get<string>('JWT_EXPIRES_IN') || '604800') },
+    }),
   }),
     UserModule,
     AuthModule
