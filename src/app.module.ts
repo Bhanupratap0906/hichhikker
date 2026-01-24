@@ -8,7 +8,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import type { JwtModuleOptions } from '@nestjs/jwt';
 
 @Module({
-  imports: [ConfigModule.forRoot(),
+  imports: [ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
     type: 'postgres',
     host: process.env.ORM_HOST,
