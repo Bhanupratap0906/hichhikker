@@ -1,11 +1,18 @@
-import { Controller, Get, NotFoundException, Req, Request, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  NotFoundException,
+  Req,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { AuthGuard } from 'src/common/decorators/authguard';
 import { CurrentUser } from 'src/common/decorators/currentUser';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) { }
+  constructor(private readonly userService: UserService) {}
   @Get('profile')
   @UseGuards(AuthGuard)
   getProfile(@CurrentUser() userId: string) {
@@ -14,5 +21,4 @@ export class UserController {
     }
     return this.userService.getProfile(userId);
   }
-
 }

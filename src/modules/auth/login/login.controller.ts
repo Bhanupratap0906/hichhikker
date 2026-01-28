@@ -5,10 +5,13 @@ import { LoginDto } from 'src/common/dtos/auth.dto.ts/login.request.dto';
 
 @Controller('auth')
 export class LoginController {
-  constructor(private readonly loginService: LoginService) { }
+  constructor(private readonly loginService: LoginService) {}
 
   @Post('login')
-  async login(@Body() data: LoginDto, @Res({ passthrough: true }) response: Response) {
+  async login(
+    @Body() data: LoginDto,
+    @Res({ passthrough: true }) response: Response,
+  ) {
     const token = await this.loginService.login(data);
     response.cookie('jwt', token);
     return 'logged in successfully';

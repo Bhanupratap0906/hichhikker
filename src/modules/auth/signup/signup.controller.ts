@@ -6,7 +6,7 @@ import { SignupDto } from 'src/common/dtos/auth.dto.ts/signUp.request.dto';
 export class SignupController {
   constructor(private readonly signupService: SignupService) {}
   @Post('signUp')
-  async signUp(@Body() data:SignupDto){
-    return this.signupService.signup(data)
+  async signUp(@Body() data: SignupDto) {
+    return this.signupService.signup(data);
   }
 }

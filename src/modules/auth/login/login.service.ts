@@ -9,25 +9,27 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class LoginService {
-    constructor(@InjectRepository(User)
+  constructor(
+    @InjectRepository(User)
     private userRepo: Repository<User>,
-        private jwtService: JwtService) { }
-    async login(data: LoginDto ) {
-        const { email, password } = data
-        const user = await this.userRepo.findOne({ where: { email } });
-        if (!user || !(await this.validatePassword(password , user))) {
-            throw new UnauthorizedException();
-        }
-        if (!user.isActive) {
-            throw new UnauthorizedException('Account is deactivated');
-        }
-        user.lastLoginAt = new Date()
-        await this.userRepo.save(user);
-        const payload = { sub: user.id, email: user.email };
-        const  access_token = await this.jwtService.signAsync(payload)  
-        return access_token
+    private jwtService: JwtService,
+  ) {}
+  async login(data: LoginDto) {
+    const { email, password } = data;
+    const user = await this.userRepo.findOne({ where: { email } });
+    if (!user || !(await this.validatePassword(password, user))) {
+      throw new UnauthorizedException();
     }
-    async validatePassword(password: string, user: User): Promise<boolean> {
-      return await bcrypt.compare(password, user.password);
+    if (!user.isActive) {
+      throw new UnauthorizedException('Account is deactivated');
     }
+    user.lastLoginAt = new Date();
+    await this.userRepo.save(user);
+    const payload = { sub: user.id, email: user.email };
+    const access_token = await this.jwtService.signAsync(payload);
+    return access_token;
+  }
+  async validatePassword(password: string, user: User): Promise<boolean> {
+    return await bcrypt.compare(password, user.password);
+  }
 }

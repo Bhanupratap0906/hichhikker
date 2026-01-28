@@ -4,7 +4,7 @@ import { SignupModule } from './signup/signup.module';
 import { LogoutModule } from './logout/logout.module';
 
 @Module({
-  imports:[ LoginModule, SignupModule, LogoutModule] , 
+  imports: [LoginModule, SignupModule, LogoutModule],
   controllers: [],
   providers: [],
 })
